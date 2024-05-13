@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "858448268333",
+    "firebase_url": "https://techclaim-c67ef-default-rtdb.firebaseio.com",
+    "project_id": "techclaim-c67ef",
+    "storage_bucket": "techclaim-c67ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858448268333:android:d271ba3e1366e9a6dcfca4",
+        "android_client_info": {
+          "package_name": "com.example.techclaim"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqqogGwpB8U2eVNs2DTzpXzoWCfgTbSE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
