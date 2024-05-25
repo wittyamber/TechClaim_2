@@ -22,7 +22,7 @@ public class splash_screen_activity extends AppCompatActivity {
         final ImageView imageView = findViewById(R.id.splash_image);
 
         Glide.with(this)
-                .load(R.drawable.sss)  // Replace with your GIF resource ID
+                .load(R.drawable.tc)  // Replace with your GIF resource ID
                 .into(imageView);
 
         // Start your main activity after a delay (optional)
@@ -32,6 +32,6 @@ public class splash_screen_activity extends AppCompatActivity {
                 startActivity(new Intent(splash_screen_activity.this, login_activity.class));
                 finish();
             }
-        }, 6000);
+        }, 5000);
     }
 }

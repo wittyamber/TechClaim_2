@@ -8,27 +8,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class signup_activity extends AppCompatActivity {
 
     private boolean passwordShowing = false;
     private boolean conpasswordShowing = false;
     private EditText signup_studID, signup_name, signup_email, signup_password, signup_password_con;
-
-    //create object of DatabaseReference class
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://techclaim-c67ef-default-rtdb.firebaseio.com/");
+    private ProgressBar progressBar;
+    private static final String TAG= "signup_activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,7 @@ public class signup_activity extends AppCompatActivity {
         final AppCompatButton signup_btn = findViewById(R.id.reg_btn);
         final TextView logintxt_btn = findViewById(R.id.logintxt_btn);
 
+        progressBar = findViewById(R.id.progressBar);
         signup_name = findViewById(R.id.signup_name);
         signup_studID = findViewById(R.id.signup_studID);
         signup_email = findViewById(R.id.signup_email);
@@ -51,104 +60,163 @@ public class signup_activity extends AppCompatActivity {
         pass_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (passwordShowing) {
-                    passwordShowing = false;
-
-                    signup_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    pass_icon.setImageResource(R.drawable.show_pass);
-                } else {
-                    passwordShowing = true;
-
-                    signup_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    pass_icon.setImageResource(R.drawable.hide_pass);
-                }
-
-                //move cursor at last of the text
-                signup_password.setSelection(signup_password.length());
-
+                togglePasswordVisibility(signup_password, pass_icon);
             }
         });
 
         pass_iconcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (conpasswordShowing) {
-                    conpasswordShowing = false;
-
-                    signup_password_con.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    pass_iconcon.setImageResource(R.drawable.show_pass);
-                } else {
-                    conpasswordShowing = true;
-
-                    signup_password_con.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    pass_iconcon.setImageResource(R.drawable.hide_pass);
-                }
-
-                //move cursor at last of the text
-                signup_password_con.setSelection(signup_password_con.length());
-
-            }
-        });
-
-        signup_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //get data from EditTexts
-                String studID, name, email, pass, pass_con;
-                studID = signup_studID.getText().toString();
-                name = signup_name.getText().toString();
-                email = signup_email.getText().toString();
-                pass = signup_password.getText().toString();
-                pass_con = signup_password_con.getText().toString();
-
-                //check if user fill all the fields
-
-                if (studID.isEmpty() || name.isEmpty() || email.isEmpty() || pass.isEmpty() || pass_con.isEmpty()) {
-                    Toast.makeText(signup_activity.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                //check if the password is matching
-                else if (!pass.equals(pass_con)){
-                    Toast.makeText(signup_activity.this, "Password Mismatch", Toast.LENGTH_SHORT).show();
-                }
-                else {
-
-                    databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener(){
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                            //check if student id is already registered
-                            if (snapshot.hasChild(studID)) {
-                                Toast.makeText(signup_activity.this, "Student ID is already registered.", Toast.LENGTH_SHORT).show();
-                            }else {
-                                //showing data to firebase
-                                databaseReference.child("users").child(studID).child("name").setValue(signup_name);
-                                databaseReference.child("users").child(studID).child("email").setValue(signup_email);
-                                databaseReference.child("users").child(studID).child("pass").setValue(signup_password);
-
-                                Toast.makeText(signup_activity.this, "You are Successfully Registered.", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                                                                                                });
-
-                }
-
+                togglePasswordVisibility(signup_password_con, pass_iconcon);
             }
         });
 
         logintxt_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 finish();
+            }
+        });
+
+        signup_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String studID = signup_studID.getText().toString().trim();
+                String name = signup_name.getText().toString().trim();
+                String email = signup_email.getText().toString().trim();
+                String pass = signup_password.getText().toString().trim();
+                String pass_con = signup_password_con.getText().toString().trim();
+
+                if (TextUtils.isEmpty(studID)) {
+                    Toast.makeText(signup_activity.this, "Please enter your ID", Toast.LENGTH_SHORT).show();
+                    signup_studID.setError("Student ID is required");
+                    signup_studID.requestFocus();
+                } else if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(signup_activity.this, "Please enter your full name", Toast.LENGTH_SHORT).show();
+                    signup_name.setError("Full name is required");
+                    signup_name.requestFocus();
+                } else if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(signup_activity.this, "Please enter your Email", Toast.LENGTH_SHORT).show();
+                    signup_email.setError("Email is required");
+                    signup_email.requestFocus();
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(signup_activity.this, "Please re-nter your Email", Toast.LENGTH_SHORT).show();
+                    signup_email.setError("Valid Email is required");
+                    signup_email.requestFocus();
+                } else if (TextUtils.isEmpty(pass)) {
+                    Toast.makeText(signup_activity.this, "Please enter your password", Toast.LENGTH_SHORT).show();
+                    signup_password.setError("Password is required");
+                    signup_password.requestFocus();
+                }else if (pass.length() < 6) {
+                    Toast.makeText(signup_activity.this, "Password should be at least 6 digits", Toast.LENGTH_SHORT).show();
+                    signup_password.setError("Password too weak");
+                    signup_password.requestFocus();
+                } else if (TextUtils.isEmpty(pass_con)) {
+                    Toast.makeText(signup_activity.this, "Please confirm your password", Toast.LENGTH_SHORT).show();
+                    signup_password_con.setError("Password confirmation is required");
+                    signup_password_con.requestFocus();
+                }else if (!pass.equals(pass_con)) {
+                    Toast.makeText(signup_activity.this, "Password mismatch", Toast.LENGTH_SHORT).show();
+                    signup_password_con.setError("Password confirmation is required");
+                    signup_password_con.requestFocus();
+                    //Clear the entered passwords
+                    signup_password.clearComposingText();
+                    signup_password_con.clearComposingText();
+                } else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    registerUser(studID, name, email, pass);
+                }
+            }
+        });
+
+    }
+
+    private void togglePasswordVisibility(EditText passwordField, ImageView icon) {
+        if (passwordField.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+            passwordField.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            icon.setImageResource(R.drawable.hide_pass);
+        } else {
+            passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            icon.setImageResource(R.drawable.show_pass);
+        }
+        passwordField.setSelection(passwordField.length());
+    }
+
+    //Register User using the credentials given
+    private void registerUser(String studID, String name, String email, String pass) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        //Create user Profile
+        auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(signup_activity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+
+                    FirebaseUser firebaseUser = auth.getCurrentUser();
+
+                    //Enter User Data Into the Firebase Realtime Database.
+                    ReadWriteUserDetails writeUserDetails = new ReadWriteUserDetails(studID, name);
+
+                    //Extracting user reference from Database
+                    DatabaseReference referenceprofile = FirebaseDatabase.getInstance().getReference("Registered Users");
+
+                    referenceprofile.child(firebaseUser.getUid()).setValue(writeUserDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if (task.isSuccessful()) {
+                                //Send Verification Email
+                                firebaseUser.sendEmailVerification();
+
+                                Toast.makeText(signup_activity.this, "User successfully registered. Please verify your email", Toast.LENGTH_LONG).show();
+
+                                //Open User Profile after successful registration
+                                Intent intent = new Intent(signup_activity.this, Profile.class);
+
+                                //Prevent users to return in signup page
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+
+                                // Start the dashboard activity
+                                intent = new Intent(signup_activity.this, MainActivity.class);
+
+                                // Prevent users from returning to the signup page
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+                                Toast.makeText(signup_activity.this, "Sign up failed. Please try again.", Toast.LENGTH_LONG).show();
+                            }
+                            //Hide ProgressBar whether user successfully registered or not
+                            progressBar.setVisibility(View.VISIBLE);
+
+                        }
+                    });
+
+
+                } else {
+                    try {
+                        throw task.getException();
+                    }catch (FirebaseAuthWeakPasswordException e) {
+                        signup_password.setError("Your password is too weak. Kindly use a combination of characters, numbers and special characters.");
+                        signup_password.requestFocus();
+                    }catch (FirebaseAuthInvalidCredentialsException e) {
+                        signup_password.setError("Your email is invalid or already in use. Kindly re-enter.");
+                        signup_password.requestFocus();
+                    }catch (FirebaseAuthUserCollisionException e) {
+                        signup_password.setError("Email is already registered. Use another email.");
+                        signup_password.requestFocus();
+                    }catch (Exception e) {
+                        Log log = null;
+                        log.e(TAG, e.getMessage());
+                        Toast.makeText(signup_activity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    //Hide ProgressBar whether user successfully registered or not
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
     }

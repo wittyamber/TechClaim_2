@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/group_1">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/home_icon"
+            android:title="Home"/>
+
+        <item
+            android:id="@+id/activities"
+            android:icon="@drawable/activities_icon"
+            android:title="Activities"/>
+
+        <item
+            android:id="@+id/payment"
+            android:icon="@drawable/payment_icon"
+            android:title="Payments"/>
+
+        <item
+            android:id="@+id/invoice"
+            android:icon="@drawable/invoice_icon"
+            android:title="Invoice"/>
+
+    </group>
+
+    <group
+        android:id="@+id/group_2">
+        <item
+            android:id="@+id/acct_mngmnt"
+            android:icon="@drawable/account_icon"
+            android:title="Account Management"/>
+
+    </group>
+
+    <group
+        android:id="@+id/group_3">
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/logout_icon"
+            android:title="Logout"/>
+    </group>
+</menu>

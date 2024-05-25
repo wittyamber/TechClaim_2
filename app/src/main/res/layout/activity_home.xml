@@ -9,6 +9,7 @@
     android:background="@drawable/wallback"
     tools:context=".Activities">
 
+
     <!-- Main content -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,17 +20,39 @@
         <include layout="@layout/toolbar"/>
 
         <!-- Welcome message -->
-
-        <!-- Description -->
         <TextView
+            android:id="@+id/welcomeTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Activities"
-            android:layout_marginLeft="15dp"
+            android:layout_gravity="center"
+            android:padding="15dp"
+            android:text="Welcome!"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:textSize="30sp" />
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            android:text="Start exploring and discover exciting activities to participate in!"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:padding="10dp"/>
+
+        <!-- Activity Details -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="List of Upcoming Event Activities:"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:padding="16dp"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -46,15 +69,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:backgroundTint="@color/light_blue"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="#89CFF0"
                         android:orientation="vertical"
-                        android:padding="10dp">
+                        android:padding="20dp">
 
                         <!-- Intramurals -->
 
@@ -69,32 +93,16 @@
                                 android:layout_weight="1"
                                 android:text="Intramurals 2024"
                                 android:textColor="@android:color/black"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="10-15-2024"
+                                android:text="Amount to be paid:"
                                 android:textColor="@android:color/black"
                                 android:textSize="18sp" />
-
                         </LinearLayout>
-
-                        <!-- Location and brief description -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Location: UMDC"
-                            android:textColor="@android:color/black"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Brief Description:  Intramurals event for all Students."
-                            android:textColor="@android:color/black"
-                            android:textSize="19sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -102,22 +110,21 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="249dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="16dp"
                                 android:layout_weight="1"
-                                android:text="Fee Amount:"
-                                android:textStyle="bold"
+                                android:text="10-25-2024"
                                 android:textColor="@android:color/black"
-                                android:textSize="19sp" />
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="P350.00"
+                                android:textStyle="bold"
                                 android:textColor="@android:color/black"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
+                                android:textSize="18sp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -125,21 +132,21 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/fest_CV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
+                    android:backgroundTint="@color/white"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="#89CFF0"
                         android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <!-- IT Fest -->
-
+                        android:padding="20dp">
+                        <!-- IT Fest-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -147,49 +154,33 @@
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:text="IT FEST"
-                                android:textStyle="bold"
                                 android:textColor="@android:color/black"
-                                android:textSize="20sp" />
+                                android:textStyle="bold"
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="04-26-2025"
+                                android:text="Amount to be paid:"
                                 android:textColor="@android:color/black"
                                 android:textSize="18sp" />
 
                         </LinearLayout>
 
-                        <!-- Location and brief description -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Location: UMDC GYMNASIUM"
-                            android:textColor="@android:color/black"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Brief Description: IT Fest event for all IT Students."
-                            android:textColor="@android:color/black"
-                            android:textSize="19sp" />
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="249dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="16dp"
                                 android:layout_weight="1"
-                                android:text="Fee Amount:"
-                                android:textStyle="bold"
+                                android:text="04-26-2025"
                                 android:textColor="@android:color/black"
                                 android:textSize="18sp" />
 
@@ -197,8 +188,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="P200.00"
-                                android:textColor="@android:color/black"
                                 android:textStyle="bold"
+                                android:textColor="@android:color/black"
                                 android:textSize="18sp" />
                         </LinearLayout>
 
@@ -207,81 +198,68 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#89CFF0"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <!-- Buwan ng Wika -->
-
-                <LinearLayout
+                    android:id="@+id/wika_CV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_margin="20dp"
+                    android:backgroundTint="@color/white"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Buwan Ng Wika"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:background="#89CFF0"
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="08-20-2025"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp" />
+                        <!-- Intramurals -->
 
-                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Location: UMDC GYMNASIUM"
-                    android:textColor="@android:color/black"
-                    android:textSize="19sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="BUWAN NG WIKA"
+                                android:textColor="@android:color/black"
+                                android:textStyle="bold"
+                                android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Brief Description:  Buwan Ng Wika for all Students."
-                    android:textColor="@android:color/black"
-                    android:textSize="19sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Amount to be paid:"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="249dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:layout_weight="1"
-                        android:textStyle="bold"
-                        android:text="Fee Amount:"
-                        android:textColor="@android:color/black"
-                        android:textSize="19sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="P100.00"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:layout_weight="1"
+                                android:text="08-20-2025"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="P100.00"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp" />
+                        </LinearLayout>
 
             </LinearLayout>
 
@@ -289,9 +267,9 @@
 
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
 
+    <!-- Side navigation drawer -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
@@ -302,5 +280,6 @@
         app:itemIconPadding="30dp"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"/>
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

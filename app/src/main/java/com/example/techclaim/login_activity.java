@@ -7,13 +7,24 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,8 +33,11 @@ import com.google.firebase.database.ValueEventListener;
 
 public class login_activity extends AppCompatActivity {
     private boolean passwordshowing = false;
+    private ProgressBar progressBar;
+    private  EditText login_email, login_password;
+    private FirebaseAuth authProfile;
+    private static final String TAG = "login_activity";
 
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://techclaim-c67ef-default-rtdb.firebaseio.com/");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,52 +45,49 @@ public class login_activity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        final EditText login_id = findViewById(R.id.login_id);
-        final EditText login_password = findViewById(R.id.login_password);
         final ImageView pass_icon = findViewById(R.id.pass_icon);
         final TextView signup_btn = findViewById(R.id.signup_btn);
         final AppCompatButton login_btn = findViewById(R.id.login_btn);
 
+        login_email = findViewById(R.id.login_email);
+        login_password = findViewById(R.id.login_password);
+        progressBar = findViewById(R.id.progressBar);
+
+        authProfile = FirebaseAuth.getInstance();
+
+        //Login User
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String studID = login_id.getText().toString();
-                final String password = login_password.getText().toString();
+                String email = login_email.getText().toString();
+                String password = login_password.getText().toString();
 
-                if (studID.isEmpty() || password.isEmpty()){
-                    Toast.makeText(login_activity.this,"Please enter Student ID or Password", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(email)) {
+                    Toast.makeText(login_activity.this, "Please enter your email. ", Toast.LENGTH_SHORT).show();
+                    login_email.setError("Email is required");
+                    login_email.requestFocus();
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(login_activity.this, "Please re-enter your email. ", Toast.LENGTH_SHORT).show();
+                    login_email.setError("Valid email is required");
+                    login_email.requestFocus();
+                } else if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(login_activity.this, "Please enter your password. ", Toast.LENGTH_SHORT).show();
+                    login_password.setError("Password is required");
+                    login_password.requestFocus();
+                } else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    loginuser(email, password);
                 }
-                else {
-                    databaseReference.child("users").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                            //check if the Student ID is already exist
-                            if (snapshot.hasChild(studID)) {
-                                final String getPassword = snapshot.child(studID).child("password").getValue(String.class);
+            }
+        });
 
-                                if (getPassword.equals(password)) {
-                                    Toast.makeText(login_activity.this,"Successfully Logged in", Toast.LENGTH_SHORT).show();
+        //sign up button or registration page
+        signup_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                                    //opens dashboard
-                                    startActivity(new Intent(login_activity.this, MainActivity.class));
-                                    finish();
-                                }
-                                else {
-                                    Toast.makeText(login_activity.this,"Incorrect Password", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            else {
-                                Toast.makeText(login_activity.this,"Incorrect Student ID", Toast.LENGTH_SHORT).show();                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                }
+                signup(v);
             }
         });
 
@@ -102,14 +113,45 @@ public class login_activity extends AppCompatActivity {
 
             }
         });
+    }
 
-        //open sign up page
-        signup_btn.setOnClickListener(new View.OnClickListener() {
+    private void loginuser(String email, String password) {
+        authProfile.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(login_activity.this, signup_activity.class));
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(login_activity.this, "You are successfully logged in.", Toast.LENGTH_LONG).show();
+
+                    // Start the dashboard activity
+                    Intent intent = new Intent(login_activity.this, Home.class);
+                    startActivity(intent);
+
+                    // Finish the login activity so the user cannot come back to it using the back button
+                    finish();
+                } else {
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthInvalidUserException e) {
+                        login_email.setError("Email does not exist. Please register");
+                        login_email.requestFocus();
+                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                        login_email.setError("Invalid credentials, Kindly check and re-enter.");
+                        login_email.requestFocus();
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                        Toast.makeText(login_activity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
 
+    public void signup(View view) {
+        Intent intent = new Intent(this, signup_activity.class);
+        startActivity(intent);
+    }
 }
+
+

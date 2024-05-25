@@ -9,37 +9,34 @@
     android:background="@drawable/wallback"
     tools:context=".Acc_Management">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <include layout="@layout/toolbar" />
-
 
         <ImageView
             android:layout_width="150dp"
             android:layout_height="120dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/prof"
-            android:layout_marginBottom="15dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/user"
             android:layout_gravity="center"/>
 
-
         <TextView
+            android:id="@+id/user_name_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:textSize="20dp"
-            android:text="Taylor Swift"
+            android:text="User Name"
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
-
         <androidx.cardview.widget.CardView
+            android:id="@+id/profile_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -47,22 +44,12 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
 
-
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#89CFF0"
                 android:orientation="vertical"
                 android:padding="10dp">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -71,21 +58,15 @@
                         android:text="Profile Information"
                         android:textColor="@android:color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
 
             </LinearLayout>
 
-
-
-
         </androidx.cardview.widget.CardView>
 
-
         <androidx.cardview.widget.CardView
+            android:id="@+id/securitySet_CV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -93,26 +74,12 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
 
-
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#89CFF0"
                 android:orientation="vertical"
                 android:padding="10dp">
-
-
-
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -121,32 +88,20 @@
                         android:text="Security Settings"
                         android:textStyle="bold"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp" />
-
-
-
-
-
-
-                </LinearLayout>
+                        android:textSize="20sp"
+                        android:layout_gravity="center"/>
             </LinearLayout>
-
-
-
 
         </androidx.cardview.widget.CardView>
 
-
         <androidx.cardview.widget.CardView
+            android:id="@+id/logout_CV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:backgroundTint="@color/light_blue"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp">
-
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -155,39 +110,32 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Payment Method"
+                        android:text="Logout"
                         android:textColor="@android:color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
-
-
-                </LinearLayout>
-
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
 
             </LinearLayout>
 
-
-
-
         </androidx.cardview.widget.CardView>
-
 
     </LinearLayout>
 
-
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:dividerInsetStart="60dp"
+        app:itemIconPadding="30dp"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

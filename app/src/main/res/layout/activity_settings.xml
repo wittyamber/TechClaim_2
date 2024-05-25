@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
+    android:background="@drawable/wallback"
     tools:context=".Settings">
 
     <LinearLayout
@@ -13,29 +14,70 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            layout="@layout/toolbar"/>
+        <include layout="@layout/back_toolbar"/>
 
+
+        <!-- Current Security Settings -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Settings"
-            android:layout_gravity="center"
-            android:layout_marginTop="400dp"
+            android:text=" Security Settings"
+            android:layout_marginTop="16dp"
             android:textColor="@color/app_black"
-            android:textSize="36dp"/>
+            android:textSize="24sp"
+            android:padding="16dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+
+        <!-- Current Password -->
+        <EditText
+            android:id="@+id/et_current_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:hint="Current Password"
+            android:inputType="textPassword"
+            android:padding="16dp" />
+
+
+        <!-- New Password -->
+        <EditText
+            android:id="@+id/et_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="New Password"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:layout_margin="16dp"/>
+
+
+        <!-- Confirm New Password -->
+        <EditText
+            android:id="@+id/et_confirm_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm New Password"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:layout_margin="16dp"/>
+
+
+        <!-- Change Password Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:text="Change Password"
+            android:textAllCaps="false"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_back_primary_15"
+            android:textColor="#FFFFFF" />
+
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_gravity= "start">
-
-        <include
-            layout="@layout/nav_drawer"/>
-
-    </RelativeLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

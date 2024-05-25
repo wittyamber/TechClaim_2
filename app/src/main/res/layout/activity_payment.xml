@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/wallback"
     android:id="@+id/drawerLayout"
     tools:context=".Payment">
 
@@ -16,26 +17,115 @@
         <include
             layout="@layout/toolbar"/>
 
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Payment"
-            android:layout_gravity="center"
-            android:layout_marginTop="400dp"
-            android:textColor="@color/app_black"
-            android:textSize="36dp"/>
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:paddingBottom="16dp"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--Invoice ID-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Invoice ID"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/editTextName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:hint="Enter invoice ID"
+                    android:padding="10dp"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Payment Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Amount"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/editTextCardNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:hint="Enter amount fee"
+                    android:padding="10dp"
+                    android:background="@android:drawable/edit_text"
+                    android:inputType="number"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Payment Method -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Payment Method"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/editTextExpiryDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:hint="Enter payment method"
+                    android:padding="10dp"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Submit Button -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonSubmitPayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Submit Payment"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/round_back_primary_15"
+                    android:textColor="@color/white"
+                    android:padding="16dp"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="300dp"
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_gravity= "start">
-
-        <include
-            layout="@layout/nav_drawer"/>
-
-    </RelativeLayout>
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:dividerInsetStart="60dp"
+        app:itemIconPadding="30dp"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

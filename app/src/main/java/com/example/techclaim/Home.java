@@ -19,27 +19,64 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class Acc_Management extends AppCompatActivity {
+public class Home extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ImageView menu_button_drawer;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private TextView welcomeTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set the window to fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_acc_management);
+        setContentView(R.layout.activity_home);
 
         drawerLayout = findViewById(R.id.drawerLayout);
         menu_button_drawer = findViewById(R.id.menu_button_drawer);
         navigationView = findViewById(R.id.nav_view);
+
+        // Initialize Firebase Auth and Database Reference
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        // Initialize TextView
+        welcomeTV = findViewById(R.id.welcomeTV);
+
+        // Get current user
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            // Fetch user's name from database
+            mDatabase.child("Users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String name = dataSnapshot.child("name").getValue(String.class);
+                        welcomeTV.setText("Welcome, " + name + "!");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Handle possible errors.
+                }
+            });
+        }
 
         menu_button_drawer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +92,7 @@ public class Acc_Management extends AppCompatActivity {
         userProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Acc_Management.this, userName.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, userName.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -67,32 +104,32 @@ public class Acc_Management extends AppCompatActivity {
                 Intent intent = null;
 
                 if (itemId == R.id.home){
-                    Toast.makeText(Acc_Management.this, "Home Clicked", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(Acc_Management.this, Home.class);
+                    Toast.makeText(Home.this, "Home Clicked", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(Home.this, Home.class);
                 }
 
                 if (itemId == R.id.activities){
-                    Toast.makeText(Acc_Management.this, "Activities Clicked", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(Acc_Management.this, Activities.class);
+                    Toast.makeText(Home.this, "Activities Clicked", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(Home.this, Activities.class);
                 }
 
                 if (itemId == R.id.invoice){
-                    Toast.makeText(Acc_Management.this, "Invoice Clicked", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(Acc_Management.this, Invoice.class);
+                    Toast.makeText(Home.this, "Invoice Clicked", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(Home.this, Invoice.class);
                 }
 
                 if (itemId == R.id.payment){
-                    Toast.makeText(Acc_Management.this, "Payment Clicked", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(Acc_Management.this, Payment.class);
+                    Toast.makeText(Home.this, "Payment Clicked", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(Home.this, Payment.class);
                 }
 
                 if (itemId == R.id.acct_mngmnt){
-                    Toast.makeText(Acc_Management.this, "Account Management Clicked", Toast.LENGTH_SHORT).show();
-                    intent = new Intent(Acc_Management.this, Acc_Management.class);
+                    Toast.makeText(Home.this, "Account Management Clicked", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(Home.this, Acc_Management.class);
                 }
 
                 if (itemId == R.id.logout){
-                    Toast.makeText(Acc_Management.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Home.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
                     finishAffinity();  // Close all activities and quit the application
                     System.exit(0);
                 }
@@ -107,39 +144,33 @@ public class Acc_Management extends AppCompatActivity {
             }
         });
 
-        CardView security = findViewById(R.id.securitySet_CV);
-        security.setOnClickListener(new View.OnClickListener() {
+        CardView intrams = findViewById(R.id.intramsCV);
+        intrams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Acc_Management.this, Settings.class);
+                Intent intent = new Intent(Home.this, Activities.class);
                 startActivity(intent);
             }
         });
 
-        CardView profile_info = findViewById(R.id.profile_info);
-        profile_info.setOnClickListener(new View.OnClickListener() {
+        CardView fest = findViewById(R.id.fest_CV);
+        fest.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Acc_Management.this, Profile.class);
+                Intent intent = new Intent(Home.this, Activities.class);
+                startActivity(intent);
+            }
+        }));
+
+        CardView wika = findViewById(R.id.wika_CV);
+        wika.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, Activities.class);
                 startActivity(intent);
             }
         });
 
-        CardView logout_CV = findViewById(R.id.logout_CV);
-        logout_CV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
-
-
-    }
-
-    private void logout() {
-        Toast.makeText(Acc_Management.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-        finishAffinity();  // Close all activities and quit the application
-        System.exit(0);    // Exit the application
     }
 
     private void clearSessionData() {
